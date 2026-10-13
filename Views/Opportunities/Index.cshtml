@@ -1,0 +1,8 @@
+@model List<Opportunity>
+@{ ViewData["Title"] = "Opportunities"; string B(string s) => s switch { "Won" => "b-green", "Lost" => "b-red", "Negotiation" => "b-amber", "Proposal" => "b-blue", _ => "b-gray" }; }
+<div class="d-flex justify-content-between align-items-center mb-4"><div><h1 class="page-title">Opportunities</h1><p class="page-sub">Total pipeline: @Model.Where(o => o.Status == "Open").Sum(o => o.Amount).ToString("N2")</p></div>
+<a class="btn btn-primary" asp-action="Create"><i class="bi bi-plus-lg me-1"></i>New Opportunity</a></div>
+<div class="card"><div class="table-responsive"><table class="table table-hover"><thead><tr><th>Opportunity</th><th>Customer</th><th>Stage</th><th class="text-end">Amount</th><th class="text-end">Prob.</th><th class="text-end">Weighted</th><th>Close date</th></tr></thead><tbody>
+@foreach (var o in Model) { <tr><td class="fw-semibold">@o.OpportunityName</td><td>@o.Customer?.CustomerName</td><td><span class="badge-s @B(o.Stage)">@o.Stage</span></td>
+<td class="text-end">@o.Amount.ToString("N2")</td><td class="text-end">@o.Probability%</td><td class="text-end fw-semibold">@((o.Amount * o.Probability / 100).ToString("N2"))</td><td>@o.ExpectedCloseDate.ToString("dd MMM yyyy")</td></tr> }
+@if (!Model.Any()) { <tr><td colspan="7" class="text-center text-muted py-5"><i class="bi bi-inbox fs-2 d-block"></i>No opportunities yet</td></tr> }</tbody></table></div></div>

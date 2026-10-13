@@ -1,0 +1,15 @@
+@{ ViewData["Title"] = "Dashboard";
+ var meta = new Dictionary<string,(string i,string c,string bg)> {
+  ["Total Customers"]=("bi-people","#4f46e5","#e0e7ff"),["Total Leads"]=("bi-funnel","#0891b2","#cffafe"),["Open Leads"]=("bi-lightning-charge","#d97706","#fef3c7"),
+  ["Total Opportunities"]=("bi-briefcase","#7c3aed","#ede9fe"),["Open Opportunities"]=("bi-folder2-open","#2563eb","#dbeafe"),["Won"]=("bi-trophy","#16a34a","#dcfce7"),
+  ["Lost"]=("bi-x-circle","#dc2626","#fee2e2"),["Pipeline Value"]=("bi-currency-rupee","#059669","#d1fae5")}; }
+<div class="mb-4"><h1 class="page-title">Dashboard</h1><p class="page-sub">Your sales overview at a glance</p></div>
+<div class="row g-3 mb-4">@foreach (var k in (Dictionary<string, object>)ViewBag.Cards) { var m = meta.GetValueOrDefault(k.Key, ("bi-circle","#334155","#e2e8f0"));
+<div class="col-6 col-xl-3"><div class="card kpi"><div class="ico" style="background:@m.Item3;color:@m.Item2"><i class="bi @m.Item1"></i></div><div><div class="lbl">@k.Key</div><div class="val">@k.Value</div></div></div></div> }</div>
+<div class="row g-3"><div class="col-lg-5"><div class="card p-4"><h6 class="fw-bold mb-3">Lead Status</h6><canvas id="lead" height="240"></canvas></div></div>
+<div class="col-lg-7"><div class="card p-4"><h6 class="fw-bold mb-3">Opportunity Pipeline</h6><canvas id="pipe" height="150"></canvas></div></div></div>
+@section Scripts { <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script><script>
+Chart.defaults.font.family='Inter';var cols=['#4f46e5','#0891b2','#16a34a','#d97706','#7c3aed','#dc2626'];
+new Chart(document.getElementById('lead'),{type:'doughnut',data:{labels:@Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.LeadLabels)),datasets:[{data:@Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.LeadData)),backgroundColor:cols,borderWidth:0}]},options:{cutout:'68%',plugins:{legend:{position:'bottom'}}}});
+new Chart(document.getElementById('pipe'),{type:'bar',data:{labels:@Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.PipeLabels)),datasets:[{label:'Opportunities',data:@Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.PipeData)),backgroundColor:cols,borderRadius:8}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{precision:0},grid:{color:'#f1f5f9'}},x:{grid:{display:false}}}}});
+</script> }

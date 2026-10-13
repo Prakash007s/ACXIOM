@@ -1,0 +1,23 @@
+@{ bool auth = User.Identity!.IsAuthenticated; var c = ViewContext.RouteData.Values["controller"]?.ToString(); string Act(string n) => c == n ? "active" : ""; }
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>@(ViewData["Title"] ?? "AcxiomCRM") - AcxiomCRM</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="~/css/site.css" rel="stylesheet" asp-append-version="true"></head><body>
+@if (!auth) { @RenderBody() } else {
+<div class="app"><aside class="sidebar">
+ <a class="brand" asp-controller="Home" asp-action="Index"><i class="bi bi-diagram-3-fill"></i>AcxiomCRM</a>
+ <nav class="nav flex-column gap-1">
+  <a class="nav-link @Act("Home")" asp-controller="Home" asp-action="Index"><i class="bi bi-speedometer2"></i>Dashboard</a>
+  <a class="nav-link @Act("Customers")" asp-controller="Customers" asp-action="Index"><i class="bi bi-people"></i>Customers</a>
+  <a class="nav-link @Act("Opportunities")" asp-controller="Opportunities" asp-action="Index"><i class="bi bi-graph-up-arrow"></i>Opportunities</a>
+ </nav>
+ <div class="user-box"><div class="d-flex align-items-center gap-2 mb-2"><div class="avatar">@User.Identity.Name![0].ToString().ToUpper()</div>
+  <div class="text-truncate"><div class="text-white fw-semibold text-truncate">@User.Identity.Name</div><div>@(User.IsInRole("Admin") ? "Admin" : User.IsInRole("Manager") ? "Manager" : "Sales Executive")</div></div></div>
+  <form asp-controller="Account" asp-action="Logout" method="post"><button class="btn btn-sm btn-outline-light w-100"><i class="bi bi-box-arrow-right me-1"></i>Sign out</button></form></div>
+</aside><div class="content"><div class="topbar"><span class="text-muted">@DateTime.Today.ToString("dddd, dd MMM yyyy")</span><span class="badge-s b-blue">@(User.IsInRole("Admin") ? "Admin" : User.IsInRole("Manager") ? "Manager" : "Sales")</span></div>
+<main class="page">@RenderBody()</main></div></div> }
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@4.0.0/dist/jquery.validate.unobtrusive.min.js"></script>
+@await RenderSectionAsync("Scripts", false)</body></html>

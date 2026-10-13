@@ -1,0 +1,11 @@
+@model OpportunityVm
+@{ ViewData["Title"] = "New Opportunity"; }
+<div class="mb-4"><h1 class="page-title">New Opportunity</h1><p class="page-sub">Amount must be above 0 and probability between 0 and 100</p></div>
+<div class="card p-4" style="max-width:820px"><form asp-action="Create" method="post"><div asp-validation-summary="ModelOnly" class="alert alert-danger"></div><div class="row g-3">
+<div class="col-md-6"><label asp-for="OpportunityName"></label><input asp-for="OpportunityName" class="form-control"><span asp-validation-for="OpportunityName" class="text-danger small"></span></div>
+<div class="col-md-6"><label asp-for="CustomerId"></label><select asp-for="CustomerId" class="form-select" asp-items="@(new SelectList((IEnumerable<Customer>)ViewBag.Customers,"CustomerId","CustomerName"))"></select><span asp-validation-for="CustomerId" class="text-danger small"></span></div>
+<div class="col-md-4"><label asp-for="Amount"></label><input asp-for="Amount" class="form-control"><span asp-validation-for="Amount" class="text-danger small"></span></div>
+<div class="col-md-4"><label asp-for="Probability"></label><input asp-for="Probability" class="form-control"><span asp-validation-for="Probability" class="text-danger small"></span></div>
+<div class="col-md-4"><label asp-for="Stage"></label><select asp-for="Stage" class="form-select" asp-items="@(new SelectList(Opportunity.Stages))"></select></div>
+<div class="col-md-6"><label asp-for="ExpectedCloseDate"></label><input asp-for="ExpectedCloseDate" type="date" class="form-control"><span asp-validation-for="ExpectedCloseDate" class="text-danger small"></span></div></div>
+<div class="mt-4 d-flex gap-2"><button class="btn btn-primary px-4">Save</button><a asp-action="Index" class="btn btn-light">Cancel</a></div></form></div>
